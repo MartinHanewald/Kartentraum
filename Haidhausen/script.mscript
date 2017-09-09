@@ -1,0 +1,6 @@
+
+open-sources file="maps\haidhausen.osm"
+use-ruleset location="rules\beautiful.mrules"
+apply-ruleset
+
+export-svg compatibility=inkscape zoom=16

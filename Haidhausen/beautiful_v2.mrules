@@ -1,0 +1,183 @@
+features
+	points
+		all points:
+	lines
+		path:		@isOneOf(highway,path,pedestrian,footway,track) and not(area=yes)
+		cycleway:	highway=cycleway
+		steps:		highway=steps
+		way:		highway=service
+		street:		@isOneOf(highway,residential,unclassified,living_street,tertiary,tertiary_link)
+		mainstreet:	@isOneOf(highway,secondary, secondary_link)
+		road:		@isOneOf(highway,primary,primary_link)
+		trunkroad:	@isOneOf(highway,trunk,trunk_link)
+		oneway:		oneway
+		waterway:	@isOneOf(waterway,stream,river)
+		rail:		railway=rail
+		stadtteil:	boundary=administrative AND admin_level=9
+	areas
+		water:		natural=water OR natural=wetland OR waterway=riverbank OR waterway=stream OR landuse=reservoir OR landuse=basin
+		green:		landuse=forest or natural=wood or (leisure=pitch and @isOneOf(sport,soccer,tennis)) or @isOneOf(leisure,park,playground)
+		building:	building=yes
+		pedestrian:	highway=pedestrian
+		parking:	amenity=parking
+		zoo:		tourism=zoo
+		cemetery:	landuse=cemetery or amenity=grave_yard
+  		retail: 	landuse=retail
+		industrial:	landuse=industrial
+		commercial: landuse=commercial
+		residential:landuse=residential
+
+
+properties
+	map-background-color:	#C0E4ED
+	font-size:				12:100%;16:200%
+	font-weight:			normal
+	font-family:			Verdana
+	text-max-width:			7
+	text-color: 			#C0E4ED
+	text-halo-color:		#227184
+	text-halo-width:		30%
+	text-halo-opacity:		0.75
+	text-align-horizontal:	center
+	text-align-vertical:	center
+	font-size:				140%
+	text-offset-vertical:	-80%
+	
+
+rules
+	target: stadtteil
+		define
+			line-style: solid
+			line-width:8
+			line-color:red
+		draw:line
+
+// --------STRASSEN-------------
+	target: mainstreet
+		define
+			text:name
+			min-zoom:5
+			line-width:6
+			line-color:#5CA2B2
+			line-style:solid
+			//border-style:solid
+			border-color:black white 50%
+			border-width:1
+		draw:line
+		
+		draw:text
+		
+	target: street
+		define
+			text:name
+			min-zoom:5
+			line-width:4
+			line-color:#5CA2B2
+			line-style:solid
+			//border-style:solid
+			border-color:black white 50%
+			border-width:1
+		draw:line
+		draw:text
+
+  // --------FUSSWEGE-------------
+	target:path
+		define
+			min-zoom : 14.5
+			max-zoom : 20
+			line-color : #FFF1CE
+			border-style : solid
+			border-width : 1
+			border-color : #D4CCB8
+			line-width : 14:1;15:1;15.5:4
+		for : tunnel=yes
+			define
+				border-style : dot
+		draw : line
+ 
+	target:cycleway
+		define
+			min-zoom:14
+			line-width:14:0.5;15:1;16:2
+			line-color:green
+			line-style:dash
+			line-opacity:30%
+			border-style:none
+//		draw:line
+	target:steps
+		define
+			min-zoom : 16
+			shape : custom
+			shape-def : -1,1, -1,-1, 1,-1, 1,1;Z
+			shape-spacing : 1
+			shape-size : 16:1;20:3
+			shape-aspect : 2.5
+			fill-color : #EFA0A5
+			line-style : none
+	//	draw : shape
+
+	target: building
+		define
+			fill-color:#FF897F
+			line-style:none
+			fill-opacity:80%
+		draw:fill
+
+
+// --------SCHIENEN-------------
+	target:rail
+		define
+			min-zoom : 11
+			shape : custom
+			shape-def : -1,1, -1,-1, 1,-1, 1,1;Z
+			shape-spacing : 1
+			shape-size : 11:1;16:3;20:6
+			shape-aspect : 0.5
+			fill-color:white
+			line-style:none
+		draw:shape
+	target:rail
+		define
+			min-zoom : 11
+			line-width:11:1;16:3;20:6
+			line-color : gray
+			line-opacity:0.5
+			border-style : none
+		draw:line
+			
+
+		
+// --------AREAS-------------
+
+	target:water
+		define
+			fill-color:#227184
+			line-style:none
+		draw:fill
+		
+	target:green
+		define
+			fill-color:#8AC5D2
+			line-style:none
+		draw:fill
+		
+ 	target:pedestrian    // Fussgängerzone
+		define
+			fill-color:black
+			line-style:none
+			fill-opacity:40%
+//		draw:fill
+
+	target: cemetery
+		define
+			fill-color: brown
+			fill-opacity:20%
+			line-style:none
+//		draw:fill
+		
+	target: residential
+		define
+			fill-color: orange
+			fill-opacity:20%
+			line-style:none
+//		draw:fill

@@ -1,0 +1,78 @@
+features
+	points
+		all points:
+	lines
+		path:@isOneOf(highway,path,pedestrian,footway,track) and not(area=yes)
+		cycleway:highway=cycleway
+		steps:highway=steps
+		way:highway=service
+		street:@isOneOf(highway,residential,unclassified,living_street,tertiary,tertiary_link)
+		mainstreet:@isOneOf(highway,secondary, secondary_link)
+		road:@isOneOf(highway,primary,primary_link)
+		trunkroad:@isOneOf(highway,trunk,trunk_link)
+		motorway_link:highway=motorway_link
+		motorway:highway=motorway
+		oneway:oneway
+		waterway:@isOneOf(waterway,stream,river)
+		rail:railway=rail
+		stadtteil: boundary=administrative AND admin_level=9
+	areas
+		water:natural=water
+		green:landuse=forest or natural=wood or (leisure=pitch and @isOneOf(sport,soccer,tennis)) or @isOneOf(leisure,park,playground)
+		building:building=yes
+		pedestrian:highway=pedestrian
+		parking:amenity=parking
+		zoo:tourism=zoo
+		cemetery:landuse=cemetery or amenity=grave_yard
+		military:military
+
+properties
+	map-background-color : #F6F3E9
+	font-size:12:100%;16:200%
+	font-weight:normal
+	font-family:Verdana
+	text-max-width:7
+	text-halo-width:15%
+	text-halo-opacity:0.75
+	text-align-horizontal:center
+	text-align-vertical:center
+	font-size:140%
+	text-offset-vertical:-10%
+
+rules
+	target: stadtteil
+		define
+			line-style: dash
+			line-width:5
+			line-color:red
+		draw:line
+	target:street
+		define
+			text:name
+			min-zoom:5
+			line-width:5
+			line-color:white
+			line-style:solid
+			border-style:solid
+			border-color:black white 60%
+			border-width:20%
+		draw:line
+		draw:text
+	target:mainstreet
+		define
+			text:name
+			min-zoom:5
+			line-width:5
+			line-color:white
+			line-style:solid
+			border-style:solid
+			border-color:black white 60%
+			border-width:20%
+		draw:line
+		draw:text
+	target:building
+		define
+			fill-color:black
+			line-style:none
+			fill-opacity:20%
+		draw:fill
