@@ -1,6 +1,9 @@
 
-open-sources file="maps\haidhausen.osm"
-use-ruleset location="rules\beautiful.mrules"
-apply-ruleset
+load-source "E:\OneDrive\Kartentraum\Haidhausen\haidhausen.osm"
+load-source "E:\OneDrive\Kartentraum\Haidhausen\haidhausen.osm"
 
-export-svg compatibility=inkscape zoom=16
+use-ruleset location="E:\OneDrive\Kartentraum\Haidhausen\haidhausen.mrules"
+apply-ruleset index=2
+
+use-ruleset location="E:\OneDrive\Kartentraum\Haidhausen\mapquest.mrules"
+apply-ruleset index=3

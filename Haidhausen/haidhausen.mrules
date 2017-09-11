@@ -1,11 +1,15 @@
 features
 	points
 		all points:
+		suburb : place=suburb
+		amenity restaurant : amenity=restaurant
+		amenity cafe : amenity=cafe
+		amenity pub : amenity=pub
+		amenity fast_food : amenity=fast_food
 	lines
-		path:@isOneOf(highway,path,pedestrian,footway,track) and not(area=yes)
+		path:@isOneOf(highway,path,pedestrian,footway,track,service) and not(area=yes)
 		cycleway:highway=cycleway
 		steps:highway=steps
-		way:highway=service
 		street:@isOneOf(highway,residential,unclassified,living_street,tertiary,tertiary_link)
 		mainstreet:@isOneOf(highway,secondary, secondary_link)
 		road:@isOneOf(highway,primary,primary_link)
@@ -13,13 +17,15 @@ features
 		motorway_link:highway=motorway_link
 		motorway:highway=motorway
 		oneway:oneway
-		waterway:@isOneOf(waterway,stream,river)
+		canal:@isOneOf(waterway,stream,canal)
 		rail:railway=rail
 		stadtteil: boundary=administrative AND admin_level=9
 	areas
-		water:natural=water
-		green:landuse=forest or natural=wood or (leisure=pitch and @isOneOf(sport,soccer,tennis)) or @isOneOf(leisure,park,playground)
-		building:building=yes
+		water : natural=water OR @isOneOf(waterway,riverbank,canal,dock) OR @isOneOf(landuse,reservoir,basin) or leisure=swimming_pool
+		flussbett: natural=shingle
+		green:@isOneOf(landuse,forest,grass,cemetery,meadow,recreation_ground) OR natural=wood OR @isOneOf(leisure,park,playground)
+		pitch: leisure=pitch
+		building:building
 		pedestrian:highway=pedestrian
 		parking:amenity=parking
 		zoo:tourism=zoo
@@ -27,52 +33,189 @@ features
 		military:military
 
 properties
-	map-background-color : #F6F3E9
-	font-size:12:100%;16:200%
+	map-background-color : blue
+	// #F6F3E9
+	font-size:12:100%;15:200%
 	font-weight:normal
-	font-family:Verdana
+	font-stretch:1
+	font-family:Bromine
 	text-max-width:7
-	text-halo-width:15%
+	text-halo-width:30%
 	text-halo-opacity:0.75
 	text-align-horizontal:center
 	text-align-vertical:center
 	font-size:140%
-	text-offset-vertical:-10%
+	text-offset-vertical:-50%
 
 rules
+
+// --------STADTTEIL-------------
 	target: stadtteil
 		define
-			line-style: dash
-			line-width:5
+			line-style: solid
+			line-width:3
 			line-color:red
 		draw:line
-	target:street
+
+	target: suburb
 		define
-			text:name
-			min-zoom:5
-			line-width:5
-			line-color:white
-			line-style:solid
-			border-style:solid
-			border-color:black white 60%
-			border-width:20%
-		draw:line
+			font-size:200%
 		draw:text
+
+// --------STRASSEN-------------
 	target:mainstreet
 		define
 			text:name
 			min-zoom:5
-			line-width:5
+			line-width:4
 			line-color:white
 			line-style:solid
 			border-style:solid
-			border-color:black white 60%
+			border-color:black white 50%
 			border-width:20%
 		draw:line
 		draw:text
+
+	target:street
+		define
+			text:name
+			min-zoom:5
+			line-width:3
+			line-color:white
+			line-style:solid
+			border-style:solid
+			border-color:black white 50%
+			border-width:20%
+		draw:line
+		draw:text
+
 	target:building
 		define
-			fill-color:black
+			fill-color:#BDBDBD
 			line-style:none
+			fill-opacity:80%
+			//fill-hatch: nwse
+			fill-hatch-color: #D8D8D8
+		draw:fill
+
+// --------FUSSWEGE-------------
+	target:path
+		define
+			min-zoom : 14.5
+			max-zoom : 20
+			line-color : #FFF1CE
+			border-style : solid
+			border-width : 1
+			border-color : #D4CCB8
+			line-width : 14:1;15:1;15.5:2
+		for : tunnel=yes
+			define
+				border-style : dot
+		draw : line
+
+	target:cycleway
+		define
+			min-zoom:14
+			line-width:14:0.5;15:1;16:1
+			line-color:green
+			line-style:dash
+			line-opacity:30%
+			border-style:none
+//		draw:line
+
+// --------------POIS-------------
+
+	target : amenity*
+		define
+			min-zoom : 16
+			text-color : #856951
+			text-offset-vertical : 150%
+			font-size: 100%
+		draw : text
+
+		define
+			min-zoom : 16
+			icon-width : 14
+		if : *pub
+			define
+				icon-image : icons/SJJB/png/food_pub.p.32.png
+		elseif : *fast_food
+			define
+				icon-image : icons/SJJB/png/food_fastfood2.p.32.png
+		elseif : *restaurant
+			define
+				icon-image : icons/SJJB/png/food_restaurant.p.32.png
+		elseif : *cafe
+			define
+				icon-image : icons/SJJB/png/food_cafe.p.32.png
+		else
+			stop
+		draw : icon
+
+// --------SCHIENEN-------------
+	target:rail
+		define
+			min-zoom : 11
+			shape : custom
+			shape-def : -1,1, -1,-1, 1,-1, 1,1;Z
+			shape-spacing : 1
+			shape-size : 11:1;16:3;20:6
+			shape-aspect : 0.5
+			fill-color:white
+			line-style:none
+		draw:shape
+	target:rail
+		define
+			min-zoom : 11
+			line-width:11:1;16:3;20:6
+			line-color : gray
+			line-opacity:0.5
+			border-style : none
+		draw:line
+
+// --------AREAS-------------
+
+	target:water
+		define
+			fill-color:blue
+			fill-opacity:30%
+			line-style:none
+		draw:fill
+
+	target:canal
+		define
+			line-color:blue
+			line-width:4
+			line-opacity:30%
+			line-style:solid
+			border-style:none
+		draw:line
+
+	target:flussbett
+		define
+			fill-color:yellow
 			fill-opacity:20%
+			line-style:none
+		draw:fill
+
+	target:green
+		define
+			fill-color:green
+			fill-opacity:40%
+			line-style:none
+			//fill-texture : E:\OneDrive\Kartentraum\Haidhausen\Textures\ForestNoiseLight.jpg
+		draw:fill
+
+	target:pitch
+		define
+			fill-color:green
+			fill-opacity:60%
+			line-style:none
+		draw:fill
+
+ 	target:pedestrian    // Fussgängerzone
+		define
+			fill-color:red
+			line-style:none
+			fill-opacity:60%
 		draw:fill
