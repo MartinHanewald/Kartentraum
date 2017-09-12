@@ -1,9 +1,13 @@
 
+
 load-source "E:\OneDrive\Kartentraum\Haidhausen\haidhausen.osm"
-load-source "E:\OneDrive\Kartentraum\Haidhausen\haidhausen.osm"
+//load-source "E:\OneDrive\Kartentraum\Haidhausen\haidhausen.osm"
 
 use-ruleset location="E:\OneDrive\Kartentraum\Haidhausen\haidhausen.mrules"
 apply-ruleset index=2
 
-use-ruleset location="E:\OneDrive\Kartentraum\Haidhausen\mapquest.mrules"
-apply-ruleset index=3
+//use-ruleset location="E:\OneDrive\Kartentraum\Haidhausen\default.mrules"
+//apply-ruleset index=3
+
+set-geo-bounds bounds=11.5683730904047,48.1150302632502,11.6212696317666,48.1462397631607
+set-print-bounds-geo
