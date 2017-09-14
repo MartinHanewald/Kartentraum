@@ -1,11 +1,10 @@
 features
-	points
-		all points:
+	points, areas
 		suburb : place=suburb
 		amenity restaurant : amenity=restaurant
 		amenity cafe : amenity=cafe
-		amenity pub : amenity=pub
-		amenity fast_food : amenity=fast_food
+		amenity pub : @isOneOf(amenity,pub,biergarten,bar)
+		//amenity fast_food : amenity=fast_food
 	lines
 		path:@isOneOf(highway,path,pedestrian,footway,track,service) and not(area=yes)
 		cycleway:highway=cycleway
@@ -32,6 +31,7 @@ features
 		cemetery:landuse=cemetery or amenity=grave_yard
 		military:military
 
+
 properties
 	map-background-color : #F6F3E9
 	font-size:12:100%;15:200%
@@ -45,6 +45,7 @@ properties
 	text-align-vertical:center
 	font-size:140%
 	text-offset-vertical:-50%
+
 
 rules
 
